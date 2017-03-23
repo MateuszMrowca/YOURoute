@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:text="Lat: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="32dp"
+            android:id="@+id/latLabel"/>
+
+
+        <TextView
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/latLabel"
+            android:layout_toRightOf="@+id/latLabel"
+            android:layout_toEndOf="@+id/latLabel"
+            android:id="@+id/latValue"/>
+
+        <TextView
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/lonLabel"
+            android:layout_toRightOf="@+id/lonLabel"
+            android:layout_toEndOf="@+id/lonLabel"
+            android:id="@+id/lonValue"/>
+
+        <TextView
+            android:text="Lon: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lonLabel"
+            android:layout_alignBaseline="@+id/latValue"
+            android:layout_alignBottom="@+id/latValue"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+</LinearLayout>
