@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 
 public class RecordRoute extends AppCompatActivity
 {
-    private Button stopRoute, startRoute, saveRoute;
+    private Button stopRoute, startRoute, saveRoute, clearRoute;
     private TextView coordinatestv;
     private BroadcastReceiver broadcastReceiver;
     DatabaseOperations myDB;
@@ -37,6 +39,8 @@ public class RecordRoute extends AppCompatActivity
         stopRoute = (Button) findViewById(R.id.stopRouteButton);
         startRoute = (Button) findViewById(R.id.startRouteButton);
         saveRoute = (Button) findViewById(R.id.saveRouteButton);
+        clearRoute = (Button) findViewById(R.id.clearRouteButton);
+
         coordinatestv = (TextView) findViewById(R.id.coordinatesTextView);
         if(!runtime_permissions())
         {
@@ -71,7 +75,7 @@ public class RecordRoute extends AppCompatActivity
     @Override
     protected void onPause()
     {
-        System.out.print("test");
+        System.out.print("onPause");
         super.onPause();
 
     }
@@ -109,9 +113,21 @@ public class RecordRoute extends AppCompatActivity
 
 
 
+
+
+    private boolean runtime_permissions() {
+        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},100);
+
+            return true;
+        }
+        return false;
+    }
+
     private void enable_buttons()
     {
-
+        SQLiteDatabase sdb;
 
         startRoute.setOnClickListener(new View.OnClickListener()
         {
@@ -129,6 +145,7 @@ public class RecordRoute extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
+                //TODO add prompt for save or delete
                 Intent i = new Intent(getApplicationContext(), GPS_Service.class);
                 stopService(i);
 
@@ -140,21 +157,22 @@ public class RecordRoute extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Toast.makeText(getBaseContext(), "Save this route, COMING SOON", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Save route", Toast.LENGTH_SHORT).show();
             }
         });
+
+        clearRoute.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Toast.makeText(getBaseContext(), "Clear table", Toast.LENGTH_SHORT).show();
+                myDB.clearTable();
+
+            }
+        });
+
     }
-
-    private boolean runtime_permissions() {
-        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},100);
-
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,  int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

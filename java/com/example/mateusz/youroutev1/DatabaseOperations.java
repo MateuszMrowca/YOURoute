@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by Mateusz on 21/02/2017.
@@ -14,13 +15,8 @@ import android.util.Log;
 public class DatabaseOperations extends SQLiteOpenHelper
 {
     public static final int database_version = 1;
-//    public String CREATE_QUERY = "CREATE TABLE "+TableData.TableInfo.TABLE_NAME+" ("+TableData.TableInfo.LATITUDE+" DOUBLE,"+ TableData.TableInfo.LONGITUDE+" DOUBLE );";
-
-    //truncate table before this
-    public String TRUNCATE_TABLE_QUERY = "TRUNCATE TABLE "+ TableData.TableInfo.TABLE_NAME;
 
     //DROP TABLE BEFORE THIS!
-//    public String DROP_TABLE_QUERY = "DROP TABLE IF EXISTS "+ TableData.TableInfo.TABLE_NAME;
     public String CREATE_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS "+TableData.TableInfo.TABLE_NAME+" ("+TableData.TableInfo.COORDINATES+" TEXT );";
 
     public DatabaseOperations(Context context)
@@ -32,16 +28,15 @@ public class DatabaseOperations extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase sdb)
     {
-        sdb.execSQL(CREATE_TABLE_QUERY);
-        Log.d("Database operations", "Table Created using: " + CREATE_TABLE_QUERY);
+        clearTable();
+        Log.d("DBO", "clearTable");
 
-        //clear table query
-//        sdb.execSQL(TRUNCATE_TABLE_QUERY);
-//        Log.d("Database operations", "Table cleared using: " + TRUNCATE_TABLE_QUERY);
+        sdb.execSQL(CREATE_TABLE_QUERY);
+        Log.d("DBO", "Table Created using: " + CREATE_TABLE_QUERY);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    public void onUpgrade(SQLiteDatabase sdb, int oldVersion, int newVersion)
     {
 
     }
@@ -50,9 +45,9 @@ public class DatabaseOperations extends SQLiteOpenHelper
     {
         SQLiteDatabase SQ = dopm.getWritableDatabase();
         ContentValues cv = new ContentValues();
-
+        Log.d("DBO", "madecv");
         String coordinates = "(" + latitude + "," + longitude + ")";
-
+        Log.d("DBO", "coordinates are: " + coordinates);
         cv.put(TableData.TableInfo.COORDINATES, coordinates);
 
         long result = SQ.insert(TableData.TableInfo.TABLE_NAME, null, cv);
@@ -67,6 +62,15 @@ public class DatabaseOperations extends SQLiteOpenHelper
             Log.d("Database operations", "One row inserted");
             return true;
         }
+    }
+
+    public void clearTable()
+    {
+//       TODO clear table query
+        SQLiteDatabase db = this.getWritableDatabase();// db.delete(TABLE_NAME,null,null);
+        //db.execSQL("delete * from"+ TABLE_NAME);
+        db.execSQL("DELETE FROM " + TableData.TableInfo.TABLE_NAME);
+        db.close();
     }
 
     public Cursor getListContents(){

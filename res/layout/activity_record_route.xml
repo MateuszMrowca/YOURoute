@@ -11,16 +11,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.mateusz.youroutev1.RecordRoute">
 
-
-    <Button
-        android:text="Start Recording"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/startRouteButton"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,9 +32,9 @@
         android:layout_above="@+id/stopRouteButton">
 
         <ListView
+            android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView" />
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <Button
@@ -52,18 +42,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/stopRouteButton"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/startRouteButton"
-        android:layout_toStartOf="@+id/startRouteButton"/>
+        android:layout_above="@+id/startRouteButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/startRouteButton"
+        android:layout_alignStart="@+id/startRouteButton"/>
 
     <Button
-        android:text="Save"
+        android:text="Start Recording"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/startRouteButton"/>
+
+    <Button
+        android:text="Save this route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/saveRouteButton"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/clearRouteButton"
+        android:layout_alignEnd="@+id/clearRouteButton"/>
+
+    <Button
+        android:id="@+id/clearRouteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/saveRouteButton"/>
+        android:text="Clear this route"/>
 
 
 </RelativeLayout>
