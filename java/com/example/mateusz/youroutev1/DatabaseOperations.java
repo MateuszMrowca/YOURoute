@@ -70,6 +70,7 @@ public class DatabaseOperations extends SQLiteOpenHelper
         SQLiteDatabase db = this.getWritableDatabase();// db.delete(TABLE_NAME,null,null);
         //db.execSQL("delete * from"+ TABLE_NAME);
         db.execSQL("DELETE FROM " + TableData.TableInfo.TABLE_NAME);
+        db.execSQL(CREATE_TABLE_QUERY);
         db.close();
     }
 

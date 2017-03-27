@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                //TODO - add a get route name dialog box with a default value "rounte 1" or random number
+                //TODO - add a get route name dialog box with a default value "route 1"
                 Intent intent = new Intent(MainActivity.this, RecordRoute.class);
                 startActivity(intent);
             }
