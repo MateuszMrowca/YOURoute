@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,10 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RecordRoute extends AppCompatActivity
 {
-    private Button stopRoute, startRoute, saveRoute, clearRoute;
+    private Button stopRoute, startRoute, saveRoute, clearRoute, showRoute;
     private TextView coordinatestv;
     private BroadcastReceiver broadcastReceiver;
     DatabaseOperations myDB;
@@ -40,6 +41,7 @@ public class RecordRoute extends AppCompatActivity
         startRoute = (Button) findViewById(R.id.startRouteButton);
         saveRoute = (Button) findViewById(R.id.saveRouteButton);
         clearRoute = (Button) findViewById(R.id.clearRouteButton);
+        showRoute = (Button) findViewById(R.id.showRouteButton);
 
         coordinatestv = (TextView) findViewById(R.id.coordinatesTextView);
         if(!runtime_permissions())
@@ -54,6 +56,8 @@ public class RecordRoute extends AppCompatActivity
         ArrayList<String> coordList = new ArrayList<>();
         Cursor data =  myDB.getListContents();
 
+        ArrayList<double[]>coordinatesasdoubles = new ArrayList<double[]>();
+
         String cData;
 
         if(data.getCount() == 0)
@@ -62,13 +66,30 @@ public class RecordRoute extends AppCompatActivity
         }
         else
         {
-            while(data.moveToNext())
-            {
+            while(data.moveToNext()) {
                 cData = data.getString(0);//coordinates
-                coordList.add(cData) ;//cannot be a String needs to take in two doubles
+
+                List<String> geopointlistnotsplit = Arrays.asList(cData.split(","));
+
+                System.out.print("Lat:" + geopointlistnotsplit.get(0));
+                System.out.print("Lon:" + geopointlistnotsplit.get(1));
+
+                double latCoord = Double.parseDouble(geopointlistnotsplit.get(0));
+                double lonCoord = Double.parseDouble(geopointlistnotsplit.get(1));
+
+                double[] geopointsList = new double[2];
+
+                geopointsList[0] = latCoord;
+                geopointsList[1] = lonCoord;
+
+                coordinatesasdoubles.add(geopointsList);
+
+                coordList.add(cData);//cannot be a String needs to take in two doubles
+
                 ListAdapter listAdapter = new ArrayAdapter<>(ctx, android.R.layout.simple_list_item_1, coordList);
                 listView.setAdapter(listAdapter);
             }
+
         }
     }
 
@@ -158,6 +179,7 @@ public class RecordRoute extends AppCompatActivity
             public void onClick(View view)
             {
                 Toast.makeText(getBaseContext(), "Save route", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -172,7 +194,11 @@ public class RecordRoute extends AppCompatActivity
             }
         });
 
+
+
     }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,  int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

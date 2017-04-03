@@ -46,7 +46,7 @@ public class DatabaseOperations extends SQLiteOpenHelper
         SQLiteDatabase SQ = dopm.getWritableDatabase();
         ContentValues cv = new ContentValues();
         Log.d("DBO", "madecv");
-        String coordinates = "(" + latitude + "," + longitude + ")";
+        String coordinates = latitude + "," + longitude; //TODO remove brackets
         Log.d("DBO", "coordinates are: " + coordinates);
         cv.put(TableData.TableInfo.COORDINATES, coordinates);
 
