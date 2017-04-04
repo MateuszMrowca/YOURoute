@@ -96,7 +96,6 @@ public class RecordRoute extends AppCompatActivity
     @Override
     protected void onPause()
     {
-        System.out.print("onPause");
         super.onPause();
 
     }
@@ -104,8 +103,6 @@ public class RecordRoute extends AppCompatActivity
     @Override
     protected void onResume()
     {
-        Toast.makeText(getBaseContext(), "onResume", Toast.LENGTH_SHORT).show();
-
         super.onResume();
         if(broadcastReceiver != null)
         {
@@ -179,7 +176,8 @@ public class RecordRoute extends AppCompatActivity
             public void onClick(View view)
             {
                 Toast.makeText(getBaseContext(), "Save route", Toast.LENGTH_SHORT).show();
-
+                //TODO serialize arraylist of coordinates
+                //TODOpass
             }
         });
 
@@ -190,6 +188,19 @@ public class RecordRoute extends AppCompatActivity
             {
                 Toast.makeText(getBaseContext(), "Clear table", Toast.LENGTH_SHORT).show();
                 myDB.clearTable();
+
+            }
+        });
+
+        showRoute.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Toast.makeText(getBaseContext(), "show", Toast.LENGTH_SHORT).show();
+                //TODO pass araylist coorinatesasdoubles into this inetnt
+                Intent intent = new Intent(RecordRoute.this, MapActivity.class);
+                startActivity(intent);
 
             }
         });
