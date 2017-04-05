@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +32,8 @@ public class RecordRoute extends AppCompatActivity
     private BroadcastReceiver broadcastReceiver;
     DatabaseOperations myDB;
     Context ctx = this;
+    private ArrayList<double[]>coordinatesasdoubles;
+    CoordinateStore cs = new CoordinateStore();
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -44,6 +47,8 @@ public class RecordRoute extends AppCompatActivity
         showRoute = (Button) findViewById(R.id.showRouteButton);
 
         coordinatestv = (TextView) findViewById(R.id.coordinatesTextView);
+        coordinatesasdoubles = new ArrayList<double[]>();
+
         if(!runtime_permissions())
         {
             enable_buttons();
@@ -56,7 +61,6 @@ public class RecordRoute extends AppCompatActivity
         ArrayList<String> coordList = new ArrayList<>();
         Cursor data =  myDB.getListContents();
 
-        ArrayList<double[]>coordinatesasdoubles = new ArrayList<double[]>();
 
         String cData;
 
@@ -66,6 +70,8 @@ public class RecordRoute extends AppCompatActivity
         }
         else
         {
+            Coordinate coordinate;
+
             while(data.moveToNext()) {
                 cData = data.getString(0);//coordinates
 
@@ -79,8 +85,13 @@ public class RecordRoute extends AppCompatActivity
 
                 double[] geopointsList = new double[2];
 
+
                 geopointsList[0] = latCoord;
                 geopointsList[1] = lonCoord;
+
+                coordinate = new Coordinate(latCoord, lonCoord);
+                cs.add(coordinate);
+
 
                 coordinatesasdoubles.add(geopointsList);
 
@@ -176,8 +187,6 @@ public class RecordRoute extends AppCompatActivity
             public void onClick(View view)
             {
                 Toast.makeText(getBaseContext(), "Save route", Toast.LENGTH_SHORT).show();
-                //TODO serialize arraylist of coordinates
-                //TODOpass
             }
         });
 
@@ -197,16 +206,15 @@ public class RecordRoute extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Toast.makeText(getBaseContext(), "show", Toast.LENGTH_SHORT).show();
-                //TODO pass araylist coorinatesasdoubles into this inetnt
-                Intent intent = new Intent(RecordRoute.this, MapActivity.class);
-                startActivity(intent);
 
+
+                Toast.makeText(getBaseContext(), "show", Toast.LENGTH_SHORT).show();
+                //TODO pass araylist coorinatesasdoubles into this intent
+                Intent intent = new Intent(RecordRoute.this, MapActivity.class);
+                intent.putExtra("List_Of_Coordintes", coordinatesasdoubles);
+                startActivity(intent);
             }
         });
-
-
-
     }
 
 

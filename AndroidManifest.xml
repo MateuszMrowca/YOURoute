@@ -35,11 +35,7 @@
             android:label="@string/title_activity_map"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name=".testMap"
-            android:label="@string/title_activity_test_map"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+
     </application>
 
 </manifest>
