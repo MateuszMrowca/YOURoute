@@ -18,14 +18,13 @@ public class MapActivity extends AppCompatActivity
 
     private MapView osm;
     private MapController mc;
-    private ArrayList<double[]>coordinatesasdoubles;
+    ArrayList<GeoPoint> waypoints = new ArrayList<>();
+    RoadManager roadManager = new OSRMRoadManager();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        //TODO receive the arraylist
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_map);
 
@@ -37,32 +36,32 @@ public class MapActivity extends AppCompatActivity
         mc = (MapController) osm.getController();
         mc.setZoom(20);
 
-        RoadManager roadManager = new OSRMRoadManager();
-        ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
         ArrayList coordinatesArrayList = getIntent().getParcelableArrayListExtra("List_Of_Coordintes"); //TODO  seerialize arraylist of coordinates
 
-        for(int i = 0; i<coordinatesArrayList.size(); i++)
+
+
+        drawRouteOnMap(coordinatesArrayList);
+    }
+
+    public void drawRouteOnMap(ArrayList coordinateList)
+    {
+        for(int i = 0; i<coordinateList.size(); i++)
         {
-            double[] a = (double[]) coordinatesArrayList.get(i);
+            double[] a = (double[]) coordinateList.get(i);
 
             waypoints.add(new GeoPoint(a[0], a[1]));
         }
 
 
-        double[] start= (double[]) coordinatesArrayList.get(0);
+        double[] start = (double[]) coordinateList.get(0);
         GeoPoint startpoint = new GeoPoint(start[0], start[1]);
-
-
-
 
         Road road = roadManager.getRoad(waypoints);
         Polyline roadOverlay = RoadManager.buildRoadOverlay(road, this);
         osm.getOverlays().add(roadOverlay);
 
         mc.setCenter(startpoint);
-
-//        addmarker(startpoint);
 
         osm.invalidate();
     }

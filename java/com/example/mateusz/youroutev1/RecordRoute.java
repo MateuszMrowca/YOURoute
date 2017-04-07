@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +36,7 @@ public class RecordRoute extends AppCompatActivity
     DatabaseOperations myDB;
     Context ctx = this;
     private ArrayList<double[]>coordinatesasdoubles;
-    CoordinateStore cs = new CoordinateStore();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -47,7 +50,7 @@ public class RecordRoute extends AppCompatActivity
         showRoute = (Button) findViewById(R.id.showRouteButton);
 
         coordinatestv = (TextView) findViewById(R.id.coordinatesTextView);
-        coordinatesasdoubles = new ArrayList<double[]>();
+        coordinatesasdoubles = new ArrayList<>();
 
         if(!runtime_permissions())
         {
@@ -70,32 +73,22 @@ public class RecordRoute extends AppCompatActivity
         }
         else
         {
-            Coordinate coordinate;
-
             while(data.moveToNext()) {
-                cData = data.getString(0);//coordinates
+                cData = data.getString(0);
 
                 List<String> geopointlistnotsplit = Arrays.asList(cData.split(","));
-
-                System.out.print("Lat:" + geopointlistnotsplit.get(0));
-                System.out.print("Lon:" + geopointlistnotsplit.get(1));
 
                 double latCoord = Double.parseDouble(geopointlistnotsplit.get(0));
                 double lonCoord = Double.parseDouble(geopointlistnotsplit.get(1));
 
                 double[] geopointsList = new double[2];
 
-
                 geopointsList[0] = latCoord;
                 geopointsList[1] = lonCoord;
 
-                coordinate = new Coordinate(latCoord, lonCoord);
-                cs.add(coordinate);
-
-
                 coordinatesasdoubles.add(geopointsList);
 
-                coordList.add(cData);//cannot be a String needs to take in two doubles
+                coordList.add(cData);
 
                 ListAdapter listAdapter = new ArrayAdapter<>(ctx, android.R.layout.simple_list_item_1, coordList);
                 listView.setAdapter(listAdapter);
@@ -156,14 +149,11 @@ public class RecordRoute extends AppCompatActivity
 
     private void enable_buttons()
     {
-        SQLiteDatabase sdb;
-
         startRoute.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                //here pass in route name as putExtra?
                 Intent i = new Intent(getApplicationContext(),GPS_Service.class);
                 startService(i);
             }
@@ -187,6 +177,20 @@ public class RecordRoute extends AppCompatActivity
             public void onClick(View view)
             {
                 Toast.makeText(getBaseContext(), "Save route", Toast.LENGTH_SHORT).show();
+                //TODO serialize file
+//                try {
+//                    FileOutputStream fos = new FileOutputStream("myRoute");
+//                    try {
+//                        ObjectOutputStream oos = new ObjectOutputStream(fos);
+//                        oos.writeObject(coordinatesasdoubles);
+//                        oos.close();
+//                        fos.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -209,7 +213,6 @@ public class RecordRoute extends AppCompatActivity
 
 
                 Toast.makeText(getBaseContext(), "show", Toast.LENGTH_SHORT).show();
-                //TODO pass araylist coorinatesasdoubles into this intent
                 Intent intent = new Intent(RecordRoute.this, MapActivity.class);
                 intent.putExtra("List_Of_Coordintes", coordinatesasdoubles);
                 startActivity(intent);
