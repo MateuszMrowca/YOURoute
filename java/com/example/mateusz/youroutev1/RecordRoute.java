@@ -8,9 +8,11 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,10 +21,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +41,7 @@ public class RecordRoute extends AppCompatActivity
     private BroadcastReceiver broadcastReceiver;
     DatabaseOperations myDB;
     Context ctx = this;
-    private ArrayList<double[]>coordinatesasdoubles;
+    private ArrayList<double[]> coordinatesasdoubles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,28 +58,24 @@ public class RecordRoute extends AppCompatActivity
         coordinatestv = (TextView) findViewById(R.id.coordinatesTextView);
         coordinatesasdoubles = new ArrayList<>();
 
-        if(!runtime_permissions())
-        {
+        if (!runtime_permissions()) {
             enable_buttons();
         }
 
-        ListView listView = (ListView)findViewById(R.id.listView);
-        myDB =new DatabaseOperations(ctx);
+        ListView listView = (ListView) findViewById(R.id.listView);
+        myDB = new DatabaseOperations(ctx);
 
         //populate arraylist with table data and then view it
         ArrayList<String> coordList = new ArrayList<>();
-        Cursor data =  myDB.getListContents();
+        Cursor data = myDB.getListContents();
 
 
         String cData;
 
-        if(data.getCount() == 0)
-        {
+        if (data.getCount() == 0) {
             Toast.makeText(ctx, "No contents in the list", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            while(data.moveToNext()) {
+        } else {
+            while (data.moveToNext()) {
                 cData = data.getString(0);
 
                 List<String> geopointlistnotsplit = Arrays.asList(cData.split(","));
@@ -108,15 +110,14 @@ public class RecordRoute extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        if(broadcastReceiver != null)
-        {
+        if (broadcastReceiver != null) {
             broadcastReceiver = new BroadcastReceiver()
             {
                 @Override
                 public void onReceive(Context context, Intent intent)
                 {
                     Toast.makeText(context, "onReceive", Toast.LENGTH_SHORT).show();
-                    coordinatestv.setText("\n" +intent.getExtras().get("coordinates"));
+                    coordinatestv.setText("\n" + intent.getExtras().get("coordinates"));
                 }
             };
             registerReceiver(broadcastReceiver, new IntentFilter("location_update"));
@@ -127,20 +128,17 @@ public class RecordRoute extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
-        if(broadcastReceiver != null)
-        {
+        if (broadcastReceiver != null) {
             unregisterReceiver(broadcastReceiver);
         }
     }
 
 
+    private boolean runtime_permissions()
+    {
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-
-
-    private boolean runtime_permissions() {
-        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},100);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
 
             return true;
         }
@@ -154,7 +152,7 @@ public class RecordRoute extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Intent i = new Intent(getApplicationContext(),GPS_Service.class);
+                Intent i = new Intent(getApplicationContext(), GPS_Service.class);
                 startService(i);
             }
         });
@@ -177,20 +175,8 @@ public class RecordRoute extends AppCompatActivity
             public void onClick(View view)
             {
                 Toast.makeText(getBaseContext(), "Save route", Toast.LENGTH_SHORT).show();
-                //TODO serialize file
-//                try {
-//                    FileOutputStream fos = new FileOutputStream("myRoute");
-//                    try {
-//                        ObjectOutputStream oos = new ObjectOutputStream(fos);
-//                        oos.writeObject(coordinatesasdoubles);
-//                        oos.close();
-//                        fos.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
+                String json = new Gson().toJson(coordinatesasdoubles);
+                writeToFile(json);
             }
         });
 
@@ -220,14 +206,50 @@ public class RecordRoute extends AppCompatActivity
         });
     }
 
+    public void writeToFile(String data)
+    {
+        // Get the directory for the user's public pictures directory.
+        final File path =
+                Environment.getExternalStoragePublicDirectory
+                        (
+                                //Environment.DIRECTORY_PICTURES
+                                Environment.DIRECTORY_DCIM + "/YOURoute/Routes/"
+                        );
+
+        // Make sure the path directory exists.
+        if (!path.exists()) {
+            // Make it, if it doesn't exit
+            path.mkdirs();
+        }
+
+        //TODO get user input file name
+        final File file = new File(path, "route1.txt");
+
+        // Save your stream, don't forget to flush() it before closing it.
+
+        try {
+            file.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(file);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(data);
+
+            myOutWriter.close();
+
+            fOut.flush();
+            fOut.close();
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,  int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 100){
-            if( grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 100) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 enable_buttons();
-            }else {
+            } else {
                 runtime_permissions();
             }
         }
