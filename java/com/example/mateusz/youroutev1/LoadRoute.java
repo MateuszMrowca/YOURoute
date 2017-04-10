@@ -61,7 +61,7 @@ public class LoadRoute extends AppCompatActivity
                 Toast.makeText(LoadRoute.this, "display map", Toast.LENGTH_SHORT).show();
                 //get arraylist
                 //sends over as intent and display route on map
-                Intent intent = new Intent(LoadRoute.this, MapActivity.class);
+                Intent intent = new Intent(LoadRoute.this, FollowRouteActivity.class);
                 intent.putExtra("List_Of_Coordintes", coordinatesasdoubles);
                 startActivity(intent);
             }

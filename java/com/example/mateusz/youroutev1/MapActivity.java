@@ -1,4 +1,5 @@
 package com.example.mateusz.youroutev1;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -15,12 +16,10 @@ import java.util.ArrayList;
 
 public class MapActivity extends AppCompatActivity
 {
-
     private MapView osm;
     private MapController mc;
     ArrayList<GeoPoint> waypoints = new ArrayList<>();
     RoadManager roadManager = new OSRMRoadManager();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,23 +35,21 @@ public class MapActivity extends AppCompatActivity
         mc = (MapController) osm.getController();
         mc.setZoom(20);
 
-
         ArrayList coordinatesArrayList = getIntent().getParcelableArrayListExtra("List_Of_Coordintes"); //TODO  serialize arraylist of coordinates
 
-
-
-        drawRouteOnMap(coordinatesArrayList);
+        if (coordinatesArrayList.size() != 0)
+        {
+            drawRouteOnMap(coordinatesArrayList);
+        }
     }
 
     public void drawRouteOnMap(ArrayList coordinateList)
     {
-        for(int i = 0; i<coordinateList.size(); i++)
-        {
+        for (int i = 0; i < coordinateList.size(); i++) {
             double[] a = (double[]) coordinateList.get(i);
 
             waypoints.add(new GeoPoint(a[0], a[1]));
         }
-
 
         double[] start = (double[]) coordinateList.get(0);
         GeoPoint startpoint = new GeoPoint(start[0], start[1]);
@@ -62,18 +59,6 @@ public class MapActivity extends AppCompatActivity
         osm.getOverlays().add(roadOverlay);
 
         mc.setCenter(startpoint);
-
-        osm.invalidate();
-    }
-
-    public void addmarker(GeoPoint start)
-    {
-        Marker marker = new Marker(osm);
-        marker.setPosition(start);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        osm.getOverlays().clear();
-        osm.getOverlays().add(marker);
-
 
         osm.invalidate();
     }
