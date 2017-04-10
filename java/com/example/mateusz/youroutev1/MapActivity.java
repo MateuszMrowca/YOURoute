@@ -37,7 +37,7 @@ public class MapActivity extends AppCompatActivity
         mc.setZoom(20);
 
 
-        ArrayList coordinatesArrayList = getIntent().getParcelableArrayListExtra("List_Of_Coordintes"); //TODO  seerialize arraylist of coordinates
+        ArrayList coordinatesArrayList = getIntent().getParcelableArrayListExtra("List_Of_Coordintes"); //TODO  serialize arraylist of coordinates
 
 
 

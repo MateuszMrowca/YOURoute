@@ -58,6 +58,7 @@ public class RecordRoute extends AppCompatActivity
         coordinatestv = (TextView) findViewById(R.id.coordinatesTextView);
         coordinatesasdoubles = new ArrayList<>();
 
+
         if (!runtime_permissions()) {
             enable_buttons();
         }
@@ -196,8 +197,6 @@ public class RecordRoute extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-
-
                 Toast.makeText(getBaseContext(), "show", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(RecordRoute.this, MapActivity.class);
                 intent.putExtra("List_Of_Coordintes", coordinatesasdoubles);
@@ -223,7 +222,7 @@ public class RecordRoute extends AppCompatActivity
         }
 
         //TODO get user input file name
-        final File file = new File(path, "route1.txt");
+        final File file = new File(path, "routetodundalk.txt");
 
         // Save your stream, don't forget to flush() it before closing it.
 

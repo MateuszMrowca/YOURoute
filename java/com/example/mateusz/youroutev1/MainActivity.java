@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity
 {
-    private Button startRouteButton;
+    private Button startRouteButton, loadRouteButton;
 
 
     @Override
@@ -28,6 +28,19 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        loadRouteButton = (Button) findViewById(R.id.loadRoute);
+        loadRouteButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(MainActivity.this, LoadRoute.class);
+                startActivity(intent);
+            }
+        });
+
+
     }
 
 }
