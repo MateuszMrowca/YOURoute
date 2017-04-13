@@ -1,11 +1,18 @@
 package com.example.mateusz.youroutev1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -19,9 +26,10 @@ import java.util.ArrayList;
 
 public class LoadRoute extends AppCompatActivity
 {
-    private Button chooseFileButton, displayMap;
+    private Button displayMap;
     private ArrayList<double[]> coordinatesasdoubles;
-
+    private String fileName;
+    Context ctx = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,28 +38,71 @@ public class LoadRoute extends AppCompatActivity
         setContentView(R.layout.activity_load_route);
         coordinatesasdoubles = new ArrayList<>();
 
-        chooseFileButton = (Button) findViewById(R.id.chooseFileButton);
         displayMap = (Button) findViewById(R.id.displayMap);
         final Gson gson = new Gson();
+        fileName = "route1.txt";
+        final ListView listView = (ListView) findViewById(R.id.listView);
+        final TextView pathTexView = (TextView) findViewById(R.id.pathTextView);
 
-        chooseFileButton.setOnClickListener(new View.OnClickListener()
+
+        ArrayList<String> filenamesList = new ArrayList<String>();
+//        String path = Environment.getExternalStorageDirectory().toString()+"/Pictures/";
+        final File path2 =
+                Environment.getExternalStoragePublicDirectory
+                        (
+                                Environment.DIRECTORY_DCIM + "/YOURoute/Routes/"
+                        );
+        String path = path2.toString();
+
+        Log.d("Files", "Path: " + path);
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        Log.d("Files", "Size: "+ files.length);
+        for (int i = 0; i < files.length; i++)
+        {
+            Log.d("Files", "FileName:" + files[i].getName());
+            filenamesList.add(files[i].getName());
+        }
+
+
+        ListAdapter listAdapter = new ArrayAdapter<>(ctx, android.R.layout.simple_list_item_1, filenamesList);
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onClick(View view)
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Toast.makeText(LoadRoute.this, "load file", Toast.LENGTH_SHORT).show();
-
-                //get path
-                //get file
-                //parse contents to coordinatesasdoubles
-                String readfromfile =  readFromFile();
+                int itemPos = position;
+                String fileName =(String) listView.getItemAtPosition(position);
+                Toast.makeText(LoadRoute.this, fileName, Toast.LENGTH_SHORT).show();
+                pathTexView.setText(fileName);
 
 
+                String readfromfile = readFromFile(fileName);
                 TypeToken<ArrayList<double[]>> token = new TypeToken<ArrayList<double[]>>(){};
                 coordinatesasdoubles = gson.fromJson(readfromfile, token.getType());
-                System.out.println();
             }
         });
+
+
+//        chooseFileButton.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                Toast.makeText(LoadRoute.this, "load file " + fileName, Toast.LENGTH_SHORT).show();
+//
+//                //get path
+//                //get file
+//                //parse contents to coordinatesasdoubles
+//                String readfromfile =  readFromFile();
+//
+//
+//                TypeToken<ArrayList<double[]>> token = new TypeToken<ArrayList<double[]>>(){};
+//                coordinatesasdoubles = gson.fromJson(readfromfile, token.getType());
+//                System.out.println();
+//            }
+//        });
 
         displayMap.setOnClickListener(new View.OnClickListener()
         {
@@ -68,15 +119,17 @@ public class LoadRoute extends AppCompatActivity
         });
     }
 
-    public String readFromFile()
+    public String readFromFile(String fileName)
     {
+        //Display directories
+        //click directory of choice
+        //
         final File path =
                 Environment.getExternalStoragePublicDirectory
                         (
-                                //Environment.DIRECTORY_PICTURES
                                 Environment.DIRECTORY_DCIM + "/YOURoute/Routes/"
                         );
-        File file = new File(path, "routetodundalk.txt");
+        File file = new File(path, fileName);
 
         //Read text from file
         StringBuilder text = new StringBuilder();
