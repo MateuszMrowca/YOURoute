@@ -85,33 +85,12 @@ public class LoadRoute extends AppCompatActivity
         });
 
 
-//        chooseFileButton.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                Toast.makeText(LoadRoute.this, "load file " + fileName, Toast.LENGTH_SHORT).show();
-//
-//                //get path
-//                //get file
-//                //parse contents to coordinatesasdoubles
-//                String readfromfile =  readFromFile();
-//
-//
-//                TypeToken<ArrayList<double[]>> token = new TypeToken<ArrayList<double[]>>(){};
-//                coordinatesasdoubles = gson.fromJson(readfromfile, token.getType());
-//                System.out.println();
-//            }
-//        });
-
         displayMap.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
                 Toast.makeText(LoadRoute.this, "display map", Toast.LENGTH_SHORT).show();
-                //get arraylist
-                //sends over as intent and display route on map
                 Intent intent = new Intent(LoadRoute.this, FollowRouteActivity.class);
                 intent.putExtra("List_Of_Coordintes", coordinatesasdoubles);
                 startActivity(intent);
@@ -121,9 +100,6 @@ public class LoadRoute extends AppCompatActivity
 
     public String readFromFile(String fileName)
     {
-        //Display directories
-        //click directory of choice
-        //
         final File path =
                 Environment.getExternalStoragePublicDirectory
                         (
@@ -131,7 +107,6 @@ public class LoadRoute extends AppCompatActivity
                         );
         File file = new File(path, fileName);
 
-        //Read text from file
         StringBuilder text = new StringBuilder();
 
         try {
@@ -142,7 +117,8 @@ public class LoadRoute extends AppCompatActivity
                 text.append(line);
             }
             br.close();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             //You'll need to add proper error handling here
         }
         return text.toString();

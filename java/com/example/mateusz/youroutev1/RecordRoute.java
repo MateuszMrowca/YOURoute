@@ -1,8 +1,11 @@
 package com.example.mateusz.youroutev1;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -13,9 +16,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,6 +47,8 @@ public class RecordRoute extends AppCompatActivity
     DatabaseOperations myDB;
     Context ctx = this;
     private ArrayList<double[]> coordinatesasdoubles;
+    private String fileNameFromUser;
+    String json;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -176,8 +183,29 @@ public class RecordRoute extends AppCompatActivity
             public void onClick(View view)
             {
                 Toast.makeText(getBaseContext(), "Save route", Toast.LENGTH_SHORT).show();
-                String json = new Gson().toJson(coordinatesasdoubles);
-                writeToFile(json);
+                json = new Gson().toJson(coordinatesasdoubles);
+
+                View v = (LayoutInflater.from(RecordRoute.this)).inflate(R.layout.user_input, null);
+
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecordRoute.this);
+                alertBuilder.setView(v);
+                final EditText userInput = (EditText) v.findViewById(R.id.userinput);
+
+                alertBuilder.setCancelable(true)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener()
+                        {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                fileNameFromUser = userInput.getText().toString();
+                                writeToFile(json, fileNameFromUser);
+
+
+                            }
+                        });
+                Dialog dialog = alertBuilder.create();
+                dialog.show();
             }
         });
 
@@ -205,9 +233,12 @@ public class RecordRoute extends AppCompatActivity
         });
     }
 
-    public void writeToFile(String data)
+    public void writeToFile(String data, String fileName)
     {
-        // Get the directory for the user's public pictures directory.
+        Toast.makeText(ctx, fileNameFromUser, Toast.LENGTH_SHORT).show();
+
+
+        // Get the directory for the user's Routes directory.
         final File path =
                 Environment.getExternalStoragePublicDirectory
                         (
@@ -222,23 +253,34 @@ public class RecordRoute extends AppCompatActivity
         }
 
         //TODO get user input file name
-        final File file = new File(path, "routetodundalk.txt");
+        final File file = new File(path, fileName + ".txt");
 
-        // Save your stream, don't forget to flush() it before closing it.
-
-        try {
-            file.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(file);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.append(data);
-
-            myOutWriter.close();
-
-            fOut.flush();
-            fOut.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
+        //check if file does'nt already exist
+        if (file.exists())
+        {
+            Toast.makeText(getBaseContext(), fileName + " already exists please enter another name", Toast.LENGTH_LONG).show();
         }
+        else
+        {
+            try {
+                file.createNewFile();
+                FileOutputStream fOut = new FileOutputStream(file);
+                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+                myOutWriter.append(data);
+
+                myOutWriter.close();
+
+                fOut.flush();
+                fOut.close();
+            } catch (IOException e) {
+                Log.e("Exception", "File write failed: " + e.toString());
+            }
+        }
+
+
+
+
+
     }
 
     @Override

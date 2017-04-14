@@ -216,7 +216,7 @@ public class FollowRouteActivity extends Activity
                 Point out = new Point();
                 mapview.getProjection().toPixels(in, out);
 
-                Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.locationcircle);
                 canvas.drawBitmap(bm,
                         out.x - bm.getWidth() / 2,  //shift the bitmap center
                         out.y - bm.getHeight() / 2,  //shift the bitmap center
