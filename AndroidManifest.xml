@@ -11,7 +11,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/youroute_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -37,8 +37,21 @@
         </activity>
         <activity android:name=".LoadRoute">
         </activity>
-
         <activity android:name=".FollowRouteActivity">
+        </activity>
+        <activity android:name=".RoutesActivity">
+        </activity>
+        <activity android:name=".Waypoints">
+        </activity>
+        <activity android:name=".add_by_address_activity">
+        </activity>
+        <activity android:name=".add_from_photo_activity">
+        </activity>
+        <activity android:name=".add_by_coordinates_activity">
+        </activity>
+        <activity android:name=".add_by_map_click_activity">
+        </activity>
+        <activity android:name=".displayAllWaypoints">
         </activity>
     </application>
 

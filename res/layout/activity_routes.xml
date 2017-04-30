@@ -14,6 +14,14 @@
         android:background="#3a4bff"
         android:gravity="start"
         >
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="90dp"
+            app:srcCompat="@drawable/recordbutton"
+            android:id="@+id/recordRoute"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@+id/textView"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,17 +47,17 @@
     </RelativeLayout>
 
     <Button
-        android:text="Routes"
+        android:text="Create a route"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Routes"
-        android:onClick="Routes"/>
+        android:id="@+id/createRoute"
+        android:onClick="startRoute"/>
 
     <Button
-        android:text="Waypoints"
+        android:text="Load a route"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Waypoints"
-        android:onClick="Waypoints"/>
+        android:id="@+id/loadRoute"
+        android:onClick="loadRoute"/>
 
 </LinearLayout>

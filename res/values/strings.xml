@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YOURouteV1</string>
+    <string name="app_name">YOURoute</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_test_map">testMap</string>
     <string name="title_activity_load_route">LoadRoute</string>

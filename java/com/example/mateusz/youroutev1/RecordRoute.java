@@ -48,6 +48,7 @@ public class RecordRoute extends AppCompatActivity
     Context ctx = this;
     private ArrayList<double[]> coordinatesasdoubles;
     private String fileNameFromUser;
+    private String fileNameSuggested;
     String json;
 
     @Override
@@ -200,8 +201,6 @@ public class RecordRoute extends AppCompatActivity
                             {
                                 fileNameFromUser = userInput.getText().toString();
                                 writeToFile(json, fileNameFromUser);
-
-
                             }
                         });
                 Dialog dialog = alertBuilder.create();
@@ -256,12 +255,9 @@ public class RecordRoute extends AppCompatActivity
         final File file = new File(path, fileName + ".txt");
 
         //check if file does'nt already exist
-        if (file.exists())
-        {
+        if (file.exists()) {
             Toast.makeText(getBaseContext(), fileName + " already exists please enter another name", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
+        } else {
             try {
                 file.createNewFile();
                 FileOutputStream fOut = new FileOutputStream(file);
@@ -278,9 +274,6 @@ public class RecordRoute extends AppCompatActivity
         }
 
 
-
-
-
     }
 
     @Override
@@ -288,7 +281,8 @@ public class RecordRoute extends AppCompatActivity
     {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
+            {
                 enable_buttons();
             } else {
                 runtime_permissions();

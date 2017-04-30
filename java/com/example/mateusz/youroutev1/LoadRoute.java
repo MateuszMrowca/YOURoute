@@ -28,7 +28,6 @@ public class LoadRoute extends AppCompatActivity
 {
     private Button displayMap;
     private ArrayList<double[]> coordinatesasdoubles;
-    private String fileName;
     Context ctx = this;
 
     @Override
@@ -40,19 +39,25 @@ public class LoadRoute extends AppCompatActivity
 
         displayMap = (Button) findViewById(R.id.displayMap);
         final Gson gson = new Gson();
-        fileName = "route1.txt";
         final ListView listView = (ListView) findViewById(R.id.listView);
         final TextView pathTexView = (TextView) findViewById(R.id.pathTextView);
 
 
-        ArrayList<String> filenamesList = new ArrayList<String>();
-//        String path = Environment.getExternalStorageDirectory().toString()+"/Pictures/";
-        final File path2 =
+        ArrayList<String> filenamesList = new ArrayList<>();
+
+        final File folder =
                 Environment.getExternalStoragePublicDirectory
                         (
                                 Environment.DIRECTORY_DCIM + "/YOURoute/Routes/"
                         );
-        String path = path2.toString();
+
+        if(!folder.exists())
+        {
+            folder.mkdirs();
+        }
+
+
+        String path = folder.toString();
 
         Log.d("Files", "Path: " + path);
         File directory = new File(path);

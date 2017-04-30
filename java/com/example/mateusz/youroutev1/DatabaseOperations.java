@@ -22,7 +22,6 @@ public class DatabaseOperations extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase sdb)
     {
-        clearTable();
         sdb.execSQL(CREATE_TABLE_QUERY);
     }
 

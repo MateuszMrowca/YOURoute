@@ -14,6 +14,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
@@ -44,9 +45,12 @@ public class FollowRouteActivity extends Activity
 
     ArrayList<OverlayItem> overlayItemArray;
 
+
+
     /**
      * Called when the activity is first created.
      */
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -123,6 +127,7 @@ public class FollowRouteActivity extends Activity
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, myLocationListener);
     }
 
