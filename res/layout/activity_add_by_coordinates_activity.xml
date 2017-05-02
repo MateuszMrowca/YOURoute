@@ -4,40 +4,63 @@
                  xmlns:tools="http://schemas.android.com/tools"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
-                 tools:context="com.example.mateusz.menusystem.add_from_photo_activity">
+                 tools:context="com.example.mateusz.youroutev1.add_by_coordinates_activity">
 
     <EditText
-        android:id="@+id/waypoint_name"
+        android:id="@+id/waypoint_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/latitudeEditText"
-        android:layout_alignParentTop="true"
         android:layout_marginTop="18dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="Enter waypoint name"/>
+        android:hint="Enter waypoint title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_alignRight="@+id/add_by_coordinates_button"
+        android:layout_alignEnd="@+id/add_by_coordinates_button"/>
+    <EditText
+        android:id="@+id/waypoint_snippet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Enter waypoint description"
+        android:layout_marginTop="11dp"
+        android:layout_below="@+id/waypoint_title"
+        android:layout_alignLeft="@+id/waypoint_title"
+        android:layout_alignStart="@+id/waypoint_title"
+        android:layout_alignRight="@+id/waypoint_title"
+        android:layout_alignEnd="@+id/waypoint_title"/>
 
     <EditText
         android:id="@+id/latitudeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="numberDecimal"
-        android:hint="enter the latitude"
-        android:layout_marginTop="89dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/longitudeEditText"/>
+        android:inputType="phone"
+        android:hint="Enter the latitude"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/waypoint_snippet"
+        android:layout_alignLeft="@+id/waypoint_snippet"
+        android:layout_alignStart="@+id/waypoint_snippet"
+        android:layout_alignRight="@+id/waypoint_snippet"
+        android:layout_alignEnd="@+id/waypoint_snippet"/>
     <EditText
         android:id="@+id/longitudeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="21dp"
         android:ems="10"
-        android:inputType="numberDecimal"
-        android:hint="enter the londitude"
-        android:layout_marginStart="13dp"
+        android:inputType="phone"
+        android:hint="Enter the londitude"
         android:layout_below="@+id/latitudeEditText"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignLeft="@+id/latitudeEditText"
+        android:layout_alignStart="@+id/latitudeEditText"
+        android:layout_alignRight="@+id/latitudeEditText"
+        android:layout_alignEnd="@+id/latitudeEditText"/>
 
     <Button
         android:id="@+id/add_by_coordinates_button"
@@ -46,6 +69,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="27dp"
-        android:text="Add wayoint"/>
+        android:text="Add waypoint"/>
 
 </RelativeLayout>
