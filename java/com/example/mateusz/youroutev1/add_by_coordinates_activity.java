@@ -9,6 +9,8 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
+//Source:<http://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android> Accessed: <01/05/2017>
+
 public class add_by_coordinates_activity extends AppCompatActivity
 {
     private EditText titleTV, descriptionTV, latTV, lonTV;
@@ -44,6 +46,7 @@ public class add_by_coordinates_activity extends AppCompatActivity
                 waypoint.add(descriptionString);
                 waypoint.add(latVal);
                 waypoint.add(lonVal);
+
 
                 Intent intent = new Intent();
                 intent.putExtra("MESSAGE", waypoint);

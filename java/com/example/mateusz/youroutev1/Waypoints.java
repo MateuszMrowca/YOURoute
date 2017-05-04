@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+/*Source:<https://www.youtube.com/watch?v=0gTXUHDz6BM> Accessed:<30/04/2017>*/
 public class Waypoints extends AppCompatActivity
 {
-
     private Button showDialogButton, displayAllWaypoits;
     String[] methods = {"Enter Coordinates","Enter Address","From Map","From Photo"};
     ArrayList waypointInfo;
@@ -27,7 +27,6 @@ public class Waypoints extends AppCompatActivity
 
         waypointsList = new ArrayList<>();
 
-
         showDialogButton = (Button) findViewById(R.id.add_waypoint);
         showDialogButton.setOnClickListener(new View.OnClickListener()
         {
@@ -36,17 +35,19 @@ public class Waypoints extends AppCompatActivity
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Waypoints.this);
                 builder.setTitle("Select method");
+
+                /*Source:<https://www.youtube.com/watch?v=BOKVp8DBLH0> Accessed:<30/05/2017>*/
                 builder.setItems(methods, new DialogInterface.OnClickListener()
                 {
+
+                    /*code for this dialog ineterface was found here: */
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i)
                     {
-                        Toast.makeText(getBaseContext(), methods[i],Toast.LENGTH_SHORT).show();
                         if(methods[i].equals("Enter Coordinates"))
                         {
                             Intent intentGetGetMessage = new Intent(Waypoints.this, add_by_coordinates_activity.class);
                             startActivityForResult(intentGetGetMessage, 2); // get results and pass on to create a waypoint
-                            Toast.makeText(getBaseContext(), "coordinates", Toast.LENGTH_SHORT).show();
                         }
                         else if(methods[i].equals("Enter Address"))
                         {
@@ -82,17 +83,15 @@ public class Waypoints extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                //get an arraylist of waypoints in this class
                 Intent intent = new Intent(Waypoints.this, displayAllWaypoints.class);
                 intent.putExtra("waypointsList", waypointsList);
                 startActivity(intent);
             }
         });
-
-
-
     }
 
+
+    //this is from http://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -110,8 +109,6 @@ public class Waypoints extends AppCompatActivity
                 waypointInfo.add(3, message.get(3));
 
                 waypointsList.add(waypointInfo);
-
-                Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
             }
         }
     }

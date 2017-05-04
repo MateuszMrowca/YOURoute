@@ -14,6 +14,7 @@ import org.osmdroid.views.MapView;
 
 import java.util.ArrayList;
 
+/*Source:<https://code.google.com/archive/p/osmbonuspack/wikis/Tutorial_1.wiki> Accessed:<04/04/2017>*/
 public class MapActivity extends AppCompatActivity
 {
     private MapView osm;
@@ -35,7 +36,7 @@ public class MapActivity extends AppCompatActivity
         mc = (MapController) osm.getController();
         mc.setZoom(20);
 
-        ArrayList coordinatesArrayList = getIntent().getParcelableArrayListExtra("List_Of_Coordintes"); //TODO  serialize arraylist of coordinates
+        ArrayList coordinatesArrayList = getIntent().getParcelableArrayListExtra("List_Of_Coordintes");
 
         if (coordinatesArrayList.size() != 0)
         {

@@ -10,7 +10,6 @@ public class RoutesActivity extends AppCompatActivity
 {
     private Button startRouteButton, loadRouteButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -23,7 +22,6 @@ public class RoutesActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                //TODO - add a get route name dialog box with a default value "route 1"
                 Intent intent = new Intent(RoutesActivity.this, RecordRoute.class);
                 startActivity(intent);
             }

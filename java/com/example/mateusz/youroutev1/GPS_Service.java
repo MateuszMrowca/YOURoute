@@ -11,6 +11,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.widget.Toast;
 
+/*Source:<https://www.youtube.com/watch?v=lvcGh2ZgHeA> Accessed:<27/03/2017>*/
+
 public class GPS_Service extends Service
 {
     private LocationManager locationManager;
@@ -50,6 +52,8 @@ public class GPS_Service extends Service
             @Override
             public void onLocationChanged(Location location)
             {
+
+                /*Source:<https://www.youtube.com/watch?v=sK15YvRIdqY> Accessed:<27/03/2017>*/
                 Intent i = new Intent("onLocationUpdate");
                 i.putExtra("coordinates", location.getLongitude()+ " : " +location.getLatitude());
                 DB.addCoordinatesToTable(DB, location.getLatitude(), location.getLongitude());
@@ -82,8 +86,6 @@ public class GPS_Service extends Service
         locationManager = (LocationManager) getApplication().getSystemService(Context.LOCATION_SERVICE);
 
         //noinspection ResourceType
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 5, listener); //this is where i will set the user preferences for MINdistance and MINtime
-
-
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 5, listener);
     }
 }

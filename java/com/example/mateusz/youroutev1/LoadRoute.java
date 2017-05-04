@@ -43,6 +43,7 @@ public class LoadRoute extends AppCompatActivity
         final TextView pathTexView = (TextView) findViewById(R.id.pathTextView);
 
 
+        /*Source:<https://www.youtube.com/watch?v=BCTgJNo0pDU> Accessed:<09/04/2017>*/
         ArrayList<String> filenamesList = new ArrayList<>();
 
         final File folder =
@@ -82,7 +83,7 @@ public class LoadRoute extends AppCompatActivity
                 Toast.makeText(LoadRoute.this, fileName, Toast.LENGTH_SHORT).show();
                 pathTexView.setText(fileName);
 
-
+                /*Source:<http://android-er.blogspot.ie/search?q=openstreetmap> Accessed:<08/04/2017>*/
                 String readfromfile = readFromFile(fileName);
                 TypeToken<ArrayList<double[]>> token = new TypeToken<ArrayList<double[]>>(){};
                 coordinatesasdoubles = gson.fromJson(readfromfile, token.getType());
@@ -124,7 +125,6 @@ public class LoadRoute extends AppCompatActivity
             br.close();
         } catch (IOException e)
         {
-            //You'll need to add proper error handling here
         }
         return text.toString();
     }

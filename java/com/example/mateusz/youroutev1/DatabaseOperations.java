@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+/*Source:<https://youtu.be/cp2rL3sAFmI> Accessed:<24/03/2017>*/
+
 public class DatabaseOperations extends SQLiteOpenHelper
 {
     public static final int database_version = 1;

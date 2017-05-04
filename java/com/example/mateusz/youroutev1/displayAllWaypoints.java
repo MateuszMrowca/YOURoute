@@ -13,6 +13,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+/*Source <http://android-er.blogspot.ie/2012/05/create-multi-marker-openstreetmap-for.html> Accessed: <01/05/2017>
+changes were made to fit my user created waypoints, this is passed in from previous activity.*/
+
+
 public class displayAllWaypoints extends Activity {
 
     private MapView myOpenMapView;
@@ -29,16 +33,16 @@ public class displayAllWaypoints extends Activity {
 
         myOpenMapView = (MapView)findViewById(R.id.openmapview);
         myOpenMapView.setBuiltInZoomControls(true);
+        myOpenMapView.setMultiTouchControls(true);
+        myOpenMapView.getMapCenter();
         myMapController = (MapController) myOpenMapView.getController();
-        myMapController.setZoom(2);
+        myMapController.setZoom(13);
         waypointsListFromIntent = new ArrayList();
 
         //--- Create Another Overlay for multi marker
         anotherOverlayItemArray = new ArrayList<OverlayItem>();
 
-
-
-
+        /*Source:<http://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android> Accessed:<1/05/2017>*/
         if(savedInstanceState == null)
         {
             Bundle extras = getIntent().getExtras();
@@ -56,6 +60,7 @@ public class displayAllWaypoints extends Activity {
             waypointsListFromIntent = (ArrayList) savedInstanceState.getSerializable("waypointsList");
         }
 
+        //this for loop was added so that i could add all waypoints as markers
         for(int i = 0; i < waypointsListFromIntent.size(); i++)
         {
             ArrayList tempWaypoint = (ArrayList) waypointsListFromIntent.get(i);
@@ -70,7 +75,6 @@ public class displayAllWaypoints extends Activity {
 
             anotherOverlayItemArray.add(new OverlayItem(title, desc, new GeoPoint(latitude, longitude)));
         }
-        anotherOverlayItemArray.add(new OverlayItem("0, 0", "0, 0", new GeoPoint(0, 0)));
 
         ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay
                 = new ItemizedIconOverlay<OverlayItem>(
@@ -87,10 +91,11 @@ public class displayAllWaypoints extends Activity {
 
         @Override
         public boolean onItemLongPress(int arg0, OverlayItem arg1) {
-            // TODO Auto-generated method stub
             return false;
         }
 
+
+        //changed the toast that displays information for user so it is easier to understand.
         @Override
         public boolean onItemSingleTapUp(int index, OverlayItem item) {
             Toast.makeText(displayAllWaypoints.this, "Title: " +item.getTitle() + "\n" + "Description: " + item.getSnippet() + "\n" + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6() , Toast.LENGTH_LONG).show();

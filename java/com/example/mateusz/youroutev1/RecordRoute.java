@@ -11,10 +11,10 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,15 +29,15 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+
+/*Source:<https://youtu.be/lvcGh2ZgHeA> Accessed:<20/04/2017>*/
 
 public class RecordRoute extends AppCompatActivity
 {
@@ -48,8 +48,8 @@ public class RecordRoute extends AppCompatActivity
     Context ctx = this;
     private ArrayList<double[]> coordinatesasdoubles;
     private String fileNameFromUser;
-    private String fileNameSuggested;
     String json;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,7 +74,6 @@ public class RecordRoute extends AppCompatActivity
         ListView listView = (ListView) findViewById(R.id.listView);
         myDB = new DatabaseOperations(ctx);
 
-        //populate arraylist with table data and then view it
         ArrayList<String> coordList = new ArrayList<>();
         Cursor data = myDB.getListContents();
 
@@ -82,7 +81,6 @@ public class RecordRoute extends AppCompatActivity
         String cData;
 
         if (data.getCount() == 0) {
-            Toast.makeText(ctx, "No contents in the list", Toast.LENGTH_SHORT).show();
         } else {
             while (data.moveToNext()) {
                 cData = data.getString(0);
@@ -125,7 +123,6 @@ public class RecordRoute extends AppCompatActivity
                 @Override
                 public void onReceive(Context context, Intent intent)
                 {
-                    Toast.makeText(context, "onReceive", Toast.LENGTH_SHORT).show();
                     coordinatestv.setText("\n" + intent.getExtras().get("coordinates"));
                 }
             };
@@ -154,6 +151,7 @@ public class RecordRoute extends AppCompatActivity
         return false;
     }
 
+    /*I added functionality to these buttons from the tutorial*/
     private void enable_buttons()
     {
         startRoute.setOnClickListener(new View.OnClickListener()
@@ -171,7 +169,6 @@ public class RecordRoute extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                //TODO add prompt for save or delete
                 Intent i = new Intent(getApplicationContext(), GPS_Service.class);
                 stopService(i);
 
@@ -183,13 +180,13 @@ public class RecordRoute extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Toast.makeText(getBaseContext(), "Save route", Toast.LENGTH_SHORT).show();
                 json = new Gson().toJson(coordinatesasdoubles);
 
                 View v = (LayoutInflater.from(RecordRoute.this)).inflate(R.layout.user_input, null);
 
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecordRoute.this);
                 alertBuilder.setView(v);
+                alertBuilder.setTitle("Please enter name for the route (e.g pizza run)");
                 final EditText userInput = (EditText) v.findViewById(R.id.userinput);
 
                 alertBuilder.setCancelable(true)
@@ -213,7 +210,6 @@ public class RecordRoute extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Toast.makeText(getBaseContext(), "Clear table", Toast.LENGTH_SHORT).show();
                 myDB.clearTable();
 
             }
@@ -224,7 +220,6 @@ public class RecordRoute extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Toast.makeText(getBaseContext(), "show", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(RecordRoute.this, MapActivity.class);
                 intent.putExtra("List_Of_Coordintes", coordinatesasdoubles);
                 startActivity(intent);
@@ -236,12 +231,11 @@ public class RecordRoute extends AppCompatActivity
     {
         Toast.makeText(ctx, fileNameFromUser, Toast.LENGTH_SHORT).show();
 
+        /*Source: <http://stackoverflow.com/questions/35481924/write-a-string-to-a-file> Accessed: <08/04/2017>*/
 
-        // Get the directory for the user's Routes directory.
         final File path =
                 Environment.getExternalStoragePublicDirectory
                         (
-                                //Environment.DIRECTORY_PICTURES
                                 Environment.DIRECTORY_DCIM + "/YOURoute/Routes/"
                         );
 
@@ -251,7 +245,6 @@ public class RecordRoute extends AppCompatActivity
             path.mkdirs();
         }
 
-        //TODO get user input file name
         final File file = new File(path, fileName + ".txt");
 
         //check if file does'nt already exist
@@ -272,8 +265,6 @@ public class RecordRoute extends AppCompatActivity
                 Log.e("Exception", "File write failed: " + e.toString());
             }
         }
-
-
     }
 
     @Override
